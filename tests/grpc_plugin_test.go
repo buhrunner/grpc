@@ -32,8 +32,8 @@ import (
 
 	"tests/proto/service"
 
+	grpcPlugin "github.com/buhta/roadrunner-server-grpc/v5"
 	goridgeRpc "github.com/roadrunner-server/goridge/v3/pkg/rpc"
-	grpcPlugin "github.com/roadrunner-server/grpc/v5"
 	rpcPlugin "github.com/roadrunner-server/rpc/v5"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"

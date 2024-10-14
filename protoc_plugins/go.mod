@@ -1,4 +1,4 @@
-module github.com/roadrunner-server/grpc/protoc_plugins/v5
+module github.com/buhta/roadrunner-server-grpc/protoc_plugins/v5
 
 go 1.23
 
