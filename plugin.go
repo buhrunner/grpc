@@ -3,6 +3,7 @@ package grpc
 import (
 	"context"
 	stderr "errors"
+	"net/http"
 	"sync"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -43,6 +44,7 @@ type Plugin struct {
 	config       *Config
 	gPool        common.Pool
 	opts         []grpc.ServerOption
+	handler      *http.Server
 	server       *grpc.Server
 	rrServer     common.Server
 	proxyList    []*proxy.Proxy
@@ -57,6 +59,9 @@ type Plugin struct {
 	requestDuration *prometheus.HistogramVec
 
 	log *zap.Logger
+
+	// middlewares to chain
+	middlewares map[string]common.Middleware
 
 	// interceptors to chain
 	interceptors map[string]common.Interceptor
@@ -124,6 +129,8 @@ func (p *Plugin) Init(cfg common.Configurer, log common.Logger, server common.Se
 
 	p.prop = propagation.NewCompositeTextMapPropagator(propagation.TraceContext{}, propagation.Baggage{}, jprop.Jaeger{})
 	p.tracer = sdktrace.NewTracerProvider()
+
+	p.middlewares = make(map[string]common.Middleware)
 	p.interceptors = make(map[string]common.Interceptor)
 
 	return nil
@@ -157,6 +164,8 @@ func (p *Plugin) Serve() chan error {
 		return errCh
 	}
 
+	p.handler = p.createHTTPServer(p.middlewares)
+
 	l, err := tcplisten.CreateListener(p.config.Listen)
 	if err != nil {
 		errCh <- errors.E(op, err)
@@ -170,7 +179,8 @@ func (p *Plugin) Serve() chan error {
 		p.log.Info("grpc server was started", zap.String("address", p.config.Listen))
 
 		p.healthServer.SetServingStatus(grpc_health_v1.HealthCheckResponse_SERVING)
-		err = p.server.Serve(l)
+		//err = p.server.Serve(l)
+		err = p.handler.Serve(l)
 		p.healthServer.Shutdown()
 		if err != nil {
 			// skip errors when stopping the server
@@ -267,6 +277,13 @@ func (p *Plugin) Workers() []*process.State {
 // Collects collecting grpc interceptors
 func (p *Plugin) Collects() []*dep.In {
 	return []*dep.In{
+		dep.Fits(func(pp any) {
+			middleware := pp.(common.Middleware)
+			// just to be safe
+			p.mu.Lock()
+			p.middlewares[middleware.Name()] = middleware
+			p.mu.Unlock()
+		}, (*common.Middleware)(nil)),
 		dep.Fits(func(pp any) {
 			interceptor := pp.(common.Interceptor)
 			// just to be safe

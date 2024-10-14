@@ -31,6 +31,9 @@ type Config struct {
 	// Env is environment variables passed to the http pool
 	Env map[string]string `mapstructure:"env"`
 
+	Middleware   []string `mapstructure:"middleware"`
+	Interceptors []string `mapstructure:"interceptors"`
+
 	GrpcPool              *pool.Config  `mapstructure:"pool"`
 	MaxSendMsgSize        int64         `mapstructure:"max_send_msg_size"`
 	MaxRecvMsgSize        int64         `mapstructure:"max_recv_msg_size"`

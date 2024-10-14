@@ -9,7 +9,14 @@ import (
 	"github.com/roadrunner-server/pool/worker"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"net/http"
 )
+
+// Middleware represents http stdlib middleware interface
+type Middleware interface {
+	Middleware(f http.Handler) http.Handler
+	Name() string
+}
 
 type Interceptor interface {
 	UnaryServerInterceptor() grpc.UnaryServerInterceptor
