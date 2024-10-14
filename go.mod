@@ -1,4 +1,4 @@
-module github.com/buhta/roadrunner-server-grpc/v5
+module github.com/buhrunner/grpc/v5
 
 go 1.23
 

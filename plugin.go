@@ -14,9 +14,9 @@ import (
 	jprop "go.opentelemetry.io/contrib/propagators/jaeger"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 
-	"github.com/buhta/roadrunner-server-grpc/v5/codec"
-	"github.com/buhta/roadrunner-server-grpc/v5/common"
-	"github.com/buhta/roadrunner-server-grpc/v5/proxy"
+	"github.com/buhrunner/grpc/v5/codec"
+	"github.com/buhrunner/grpc/v5/common"
+	"github.com/buhrunner/grpc/v5/proxy"
 	"github.com/roadrunner-server/endure/v2/dep"
 	"github.com/roadrunner-server/errors"
 	"github.com/roadrunner-server/pool/pool"

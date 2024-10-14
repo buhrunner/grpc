@@ -9,9 +9,9 @@ import (
 	"path"
 	"time"
 
-	"github.com/buhta/roadrunner-server-grpc/v5/common"
-	"github.com/buhta/roadrunner-server-grpc/v5/parser"
-	"github.com/buhta/roadrunner-server-grpc/v5/proxy"
+	"github.com/buhrunner/grpc/v5/common"
+	"github.com/buhrunner/grpc/v5/parser"
+	"github.com/buhrunner/grpc/v5/proxy"
 	"github.com/roadrunner-server/errors"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.uber.org/zap"

@@ -1,7 +1,7 @@
 package grpc
 
 import (
-	"github.com/buhta/roadrunner-server-grpc/v5/common"
+	"github.com/buhrunner/grpc/v5/common"
 	"golang.org/x/net/http2"
 	"golang.org/x/net/http2/h2c"
 	"net/http"
